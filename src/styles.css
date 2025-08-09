@@ -1,0 +1,22 @@
+*{box-sizing:border-box}
+:root{--fg:#f7f7f7;--bg:#0a0a0a;--glass:rgba(0,0,0,.45);--accent:#e5b100}
+body{font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;}
+.hud{position:fixed;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:8px;color:var(--fg)}
+.card{background:var(--glass);backdrop-filter: blur(8px);border-radius:16px;padding:8px 12px}
+.center{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+.button{pointer-events:auto;background:#1a1a1a;color:#fff;border:1px solid #333;border-radius:14px;padding:10px 14px;min-width:120px}
+.row{display:flex;gap:8px;align-items:center}
+.col{display:flex;flex-direction:column;gap:8px}
+.input{pointer-events:auto;background:#101010;color:#fff;border:1px solid #333;border-radius:12px;padding:10px 12px}
+.badge{background:#111;border:1px solid #2a2a2a;border-radius:999px;padding:4px 10px}
+.flex{display:flex}
+.gap6{gap:6px}
+.bottom{position:fixed;bottom:10px;width:100%;display:flex;justify-content:center}
+.toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%);background:#111;padding:8px 12px;border-radius:12px;border:1px solid #333}
+/* joystick */
+.joy-wrap{position:fixed;bottom:16px;left:16px;width:120px;height:120px;pointer-events:auto}
+.joy-base{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15)}
+.joy-stick{position:absolute;left:50%;top:50%;width:60px;height:60px;margin-left:-30px;margin-top:-30px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25)}
+.joy-look{left:auto;right:16px}
+.btn-grab{position:fixed;right:18px;bottom:18px;pointer-events:auto}
+.scoreboard{position:fixed;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:8px;flex-wrap:wrap;justify-content:center;pointer-events:none}
