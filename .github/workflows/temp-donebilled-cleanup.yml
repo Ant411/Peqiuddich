@@ -1,0 +1,22 @@
+name: Temporary DoneBilled bridge cleanup
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/temp-donebilled-cleanup.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Remove temporary public release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release delete donebilled-stage8-chat --repo "$GH_REPO" --cleanup-tag -y || true
