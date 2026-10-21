@@ -1,0 +1,30 @@
+name: DoneBilled Stage 9 verified chat attachment
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/donebilled-stage9-verified-chat.yml"
+permissions:
+  contents: read
+jobs:
+  handoff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fetch verified Stage 9 APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://snqoeaciypftwwdhdwhv.supabase.co/functions/v1/donebilled-stage9-delivery?token=Stage9NavDownload_4wN9cF6hJ2sP8yB5"
+          APK="DoneBilled-AU-Stage9-Navigation-Test.apk"
+          curl --fail --silent --show-error -L "$URL" -o "$APK"
+          test "$(stat -c%s "$APK")" = "3509175"
+          echo "6cf99871a13bb9bc0f260bc89bf9eef75ac4aea6bc10757604c56bb69ab1942c  $APK" | sha256sum -c -
+          unzip -t "$APK" >/dev/null
+      - name: Upload APK for ChatGPT
+        uses: actions/upload-artifact@v4
+        with:
+          name: DoneBilled-AU-Stage9-Navigation-Test
+          path: DoneBilled-AU-Stage9-Navigation-Test.apk
+          retention-days: 1
+          compression-level: 0
