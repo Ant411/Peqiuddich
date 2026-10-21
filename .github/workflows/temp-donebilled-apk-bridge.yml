@@ -1,0 +1,37 @@
+name: Temporary DoneBilled APK bridge
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/temp-donebilled-apk-bridge.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fetch verified DoneBilled APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://snqoeaciypftwwdhdwhv.supabase.co/storage/v1/object/public/donebilled-transfer-public/DoneBilled-AU-Stage8-Test.apk?download=DoneBilled-AU-Stage8-Test.apk"
+          curl --fail --silent --show-error -L "$URL" -o DoneBilled-AU-Stage8-Test.apk
+          test "$(stat -c%s DoneBilled-AU-Stage8-Test.apk)" = "3508663"
+          echo "cf58eb168bcf45213e102c25b654b167243f49987224c46a189df3fcb4d2b42a  DoneBilled-AU-Stage8-Test.apk" | sha256sum -c -
+          unzip -t DoneBilled-AU-Stage8-Test.apk >/dev/null
+
+      - name: Publish temporary release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="donebilled-stage8-chat"
+          gh release delete "$TAG" --repo "$GH_REPO" --cleanup-tag -y >/dev/null 2>&1 || true
+          gh release create "$TAG" --repo "$GH_REPO" --prerelease --title "Temporary DoneBilled Stage 8 APK" --notes "Temporary bridge for ChatGPT file handoff."
+          gh release upload "$TAG" "DoneBilled-AU-Stage8-Test.apk" --repo "$GH_REPO"
