@@ -1,0 +1,29 @@
+name: DoneBilled continuation source bridge
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/donebilled-continuation-source-bridge.yml"
+permissions:
+  contents: read
+jobs:
+  handoff:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fetch exact Stage 9 source capsule
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://snqoeaciypftwwdhdwhv.supabase.co/functions/v1/donebilled-stage9-source-delivery?token=Stage9SourceDownload_6cV1nQ8sL3yH"
+          FILE="DoneBilled-AU-Stage9-Source.zip"
+          curl --fail --silent --show-error -L "$URL" -o "$FILE"
+          unzip -t "$FILE" >/dev/null
+          sha256sum "$FILE"
+      - name: Upload source for continuation capsule
+        uses: actions/upload-artifact@v4
+        with:
+          name: DoneBilled-AU-Stage9-Source
+          path: DoneBilled-AU-Stage9-Source.zip
+          retention-days: 1
+          compression-level: 0
